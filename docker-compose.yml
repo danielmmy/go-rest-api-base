@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+
+  # go rest api
+  api:
+    build:
+      context: ./
+      dockerfile: go-rest.dockerfile
+    restart: on-failure
+    ports:
+      - "15006:8001"
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      - PORT=8001
+
+  
