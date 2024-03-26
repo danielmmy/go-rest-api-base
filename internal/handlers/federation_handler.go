@@ -7,8 +7,6 @@ import (
 
 	"gorest/api"
 	"gorest/internal/tools"
-
-	"github.com/go-chi/chi/v5"
 )
 
 var readJsonAlias = (*App).readJson
@@ -40,7 +38,7 @@ func (app *App) addFederation(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *App) GetFederation(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil {
 		tools.ErrorLogger.Println(err)
 		writeResponseAlias(app, w, http.StatusBadRequest, err)
@@ -93,7 +91,7 @@ func (app *App) updateFederation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil {
 		tools.ErrorLogger.Println(err)
 		writeResponseAlias(app, w, http.StatusBadRequest, err)
@@ -116,7 +114,7 @@ func (app *App) updateFederation(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *App) deleteFederation(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil {
 		tools.ErrorLogger.Println(err)
 		writeResponseAlias(app, w, http.StatusBadRequest, err)

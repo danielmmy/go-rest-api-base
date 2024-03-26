@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"bytes"
-	"context"
 	"errors"
 	"net/http"
 	"net/http/httptest"
@@ -13,8 +12,6 @@ import (
 
 	"gorest/api"
 	"gorest/internal/tools"
-
-	"github.com/go-chi/chi/v5"
 )
 
 // test addFederation(w http.ResponseWriter, r *http.Request) read error
@@ -271,9 +268,7 @@ func TestGetFederationBadUrlParam(t *testing.T) {
 	}
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("GET", "/federations/abc", nil)
-	chiCtx := chi.NewRouteContext()
-	chiCtx.URLParams.Add("id", "abc")
-	r = r.WithContext(context.WithValue(r.Context(), chi.RouteCtxKey, chiCtx))
+	r.SetPathValue("id", "abc")
 	defer func() {
 		tools.ErrorLogger.SetOutput(os.Stderr)
 	}()
@@ -316,9 +311,7 @@ func TestGetFederationRepoError(t *testing.T) {
 	}
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("GET", "/federations/1", nil)
-	chiCtx := chi.NewRouteContext()
-	chiCtx.URLParams.Add("id", "1")
-	r = r.WithContext(context.WithValue(r.Context(), chi.RouteCtxKey, chiCtx))
+	r.SetPathValue("id", "1")
 	defer func() {
 		tools.ErrorLogger.SetOutput(os.Stderr)
 	}()
@@ -364,9 +357,7 @@ func TestGetFederationRepoNilRespondError(t *testing.T) {
 	}
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("GET", "/federations/3", nil)
-	chiCtx := chi.NewRouteContext()
-	chiCtx.URLParams.Add("id", "3")
-	r = r.WithContext(context.WithValue(r.Context(), chi.RouteCtxKey, chiCtx))
+	r.SetPathValue("id", "3")
 	defer func() {
 		tools.ErrorLogger.SetOutput(os.Stderr)
 	}()
@@ -412,9 +403,7 @@ func TestGetFederationRepoNil(t *testing.T) {
 	}
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("GET", "/federations/3", nil)
-	chiCtx := chi.NewRouteContext()
-	chiCtx.URLParams.Add("id", "3")
-	r = r.WithContext(context.WithValue(r.Context(), chi.RouteCtxKey, chiCtx))
+	r.SetPathValue("id", "3")
 	wantErrorMessage := "federation 3 not found"
 
 	// act
@@ -445,9 +434,7 @@ func TestGetFederationErrorResponding(t *testing.T) {
 	}
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("GET", "/federations/1", nil)
-	chiCtx := chi.NewRouteContext()
-	chiCtx.URLParams.Add("id", "1")
-	r = r.WithContext(context.WithValue(r.Context(), chi.RouteCtxKey, chiCtx))
+	r.SetPathValue("id", "1")
 	wantLog := regexp.MustCompile("test error")
 	defer func() {
 		tools.ErrorLogger.SetOutput(os.Stderr)
@@ -485,9 +472,7 @@ func TestGetFederationSuccess(t *testing.T) {
 	}
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("GET", "/federations/1", nil)
-	chiCtx := chi.NewRouteContext()
-	chiCtx.URLParams.Add("id", "1")
-	r = r.WithContext(context.WithValue(r.Context(), chi.RouteCtxKey, chiCtx))
+	r.SetPathValue("id", "1")
 
 	// act
 	sut.GetFederation(w, r)
@@ -627,9 +612,7 @@ func TestUpdateFederationReadError(t *testing.T) {
 		return nil
 	}
 	r := httptest.NewRequest("PUT", "/federations/1", nil)
-	chiCtx := chi.NewRouteContext()
-	chiCtx.URLParams.Add("id", "1")
-	r = r.WithContext(context.WithValue(r.Context(), chi.RouteCtxKey, chiCtx))
+	r.SetPathValue("id", "1")
 	w := httptest.NewRecorder()
 	defer func() {
 		tools.ErrorLogger.SetOutput(os.Stderr)
@@ -673,9 +656,7 @@ func TestUpdateFederationUrlParamError(t *testing.T) {
 		return nil
 	}
 	r := httptest.NewRequest("PUT", "/federations/abc", nil)
-	chiCtx := chi.NewRouteContext()
-	chiCtx.URLParams.Add("id", "abc")
-	r = r.WithContext(context.WithValue(r.Context(), chi.RouteCtxKey, chiCtx))
+	r.SetPathValue("id", "abc")
 	w := httptest.NewRecorder()
 	defer func() {
 		tools.ErrorLogger.SetOutput(os.Stderr)
@@ -723,9 +704,7 @@ func TestUpdateFederationRepoError(t *testing.T) {
 	}
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("PUT", "/federations/1", nil)
-	chiCtx := chi.NewRouteContext()
-	chiCtx.URLParams.Add("id", "1")
-	r = r.WithContext(context.WithValue(r.Context(), chi.RouteCtxKey, chiCtx))
+	r.SetPathValue("id", "1")
 	defer func() {
 		tools.ErrorLogger.SetOutput(os.Stderr)
 	}()
@@ -774,9 +753,7 @@ func TestUpdateFederationUpdateError(t *testing.T) {
 	}
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("PUT", "/federations/1", nil)
-	chiCtx := chi.NewRouteContext()
-	chiCtx.URLParams.Add("id", "1")
-	r = r.WithContext(context.WithValue(r.Context(), chi.RouteCtxKey, chiCtx))
+	r.SetPathValue("id", "1")
 	defer func() {
 		tools.ErrorLogger.SetOutput(os.Stderr)
 	}()
@@ -831,9 +808,7 @@ func TestUpdateFederationUpdateErrorRespondError(t *testing.T) {
 	}
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("PUT", "/federations/1", nil)
-	chiCtx := chi.NewRouteContext()
-	chiCtx.URLParams.Add("id", "1")
-	r = r.WithContext(context.WithValue(r.Context(), chi.RouteCtxKey, chiCtx))
+	r.SetPathValue("id", "1")
 	defer func() {
 		tools.ErrorLogger.SetOutput(os.Stderr)
 	}()
@@ -892,9 +867,7 @@ func TestUpdateFederationSuccess(t *testing.T) {
 	}
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("PUT", "/federations/1", nil)
-	chiCtx := chi.NewRouteContext()
-	chiCtx.URLParams.Add("id", "1")
-	r = r.WithContext(context.WithValue(r.Context(), chi.RouteCtxKey, chiCtx))
+	r.SetPathValue("id", "1")
 	wantCode := 200
 
 	// act
@@ -929,9 +902,7 @@ func TestDeleteFederationUrlParamError(t *testing.T) {
 	}
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("DELETE", "/federations/abc", nil)
-	chiCtx := chi.NewRouteContext()
-	chiCtx.URLParams.Add("id", "abc")
-	r = r.WithContext(context.WithValue(r.Context(), chi.RouteCtxKey, chiCtx))
+	r.SetPathValue("id", "abc")
 	defer func() {
 		tools.ErrorLogger.SetOutput(os.Stderr)
 	}()
@@ -971,9 +942,7 @@ func TestDeleteFederationRepoError(t *testing.T) {
 	}
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("DELETE", "/federations/3", nil)
-	chiCtx := chi.NewRouteContext()
-	chiCtx.URLParams.Add("id", "3")
-	r = r.WithContext(context.WithValue(r.Context(), chi.RouteCtxKey, chiCtx))
+	r.SetPathValue("id", "3")
 	defer func() {
 		tools.ErrorLogger.SetOutput(os.Stderr)
 	}()
@@ -1019,9 +988,7 @@ func TestDeleteFederationDeleteError(t *testing.T) {
 	}
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("DELETE", "/federations/1", nil)
-	chiCtx := chi.NewRouteContext()
-	chiCtx.URLParams.Add("id", "1")
-	r = r.WithContext(context.WithValue(r.Context(), chi.RouteCtxKey, chiCtx))
+	r.SetPathValue("id", "1")
 	defer func() {
 		tools.ErrorLogger.SetOutput(os.Stderr)
 	}()
@@ -1066,9 +1033,7 @@ func TestDeleteFederationDeleteErrorRespondError(t *testing.T) {
 	}
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("DELETE", "/federations/1", nil)
-	chiCtx := chi.NewRouteContext()
-	chiCtx.URLParams.Add("id", "1")
-	r = r.WithContext(context.WithValue(r.Context(), chi.RouteCtxKey, chiCtx))
+	r.SetPathValue("id", "1")
 	defer func() {
 		tools.ErrorLogger.SetOutput(os.Stderr)
 	}()
@@ -1117,9 +1082,7 @@ func TestDeleteFederationSuccess(t *testing.T) {
 	}
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("DELETE", "/federations/1", nil)
-	chiCtx := chi.NewRouteContext()
-	chiCtx.URLParams.Add("id", "1")
-	r = r.WithContext(context.WithValue(r.Context(), chi.RouteCtxKey, chiCtx))
+	r.SetPathValue("id", "1")
 	wantCode := 200
 
 	// act
